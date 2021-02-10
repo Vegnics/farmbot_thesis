@@ -13,14 +13,14 @@ def usb_camera_photo():
     discard_frames = 10  # number of frames to discard for auto-adjust
     max_attempts = 5  # number of failed discard frames before quit
     cam = cv2.VideoCapture(0)
-    start = time.time()
+    start = time()
     cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # 640
     cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # 480
     cam.set(cv2.CAP_PROP_BRIGHTNESS, 0.35)  # 0.5
     cam.set(cv2.CAP_PROP_CONTRAST, 0.73)  # 0.733333
     cam.set(cv2.CAP_PROP_SATURATION, 0.5)  # 0.3543
     cam.set(cv2.CAP_PROP_HUE, 0.5)  # 0.5
-    end = time.time()
+    end = time()
     elaṕsed = end-start
     device.log(message='setting time= {} seconds'.format(elapsed), message_type='success')
     failed_attempts = 0
