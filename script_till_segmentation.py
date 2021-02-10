@@ -161,9 +161,10 @@ def compare_fourier_descriptors(fourier1,fourier2,N=10):
     rms_error = np.sqrt(np.sum(error_sq)/N)
     return rms_error
 
-#OBTAINING CONSTANT DATA: HOMO KERNEL, CALIBRATION PARAMETERS
+#OBTAINING CONSTANT DATA: HOMO KERNEL, CALIBRATION PARAMETERS, DESCRIPTORS
 dir_path = os.path.dirname(os.path.realpath(__file__))
 butt_kernel = np.load(dir_path+'/'+'kernel_butt.npy')
+descriptors = np.load(dir_path+'/'+'descriptors2.npy')
 
 #OBTAINING THE IMAGE
 img=usb_camera_photo()
@@ -196,7 +197,13 @@ for cnt in contours:
     if len(cnt)>45:
         descriptor = calc_normalized_fourier(cnt)
         cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
-
+        results=[]
+        for desc in descriptors: 
+            D = compare_fourier_descriptors(descriptor, desc, N=50)
+            results.append(D)
+        result_min = np.mean(results)
+        device.log(message='compare = {}'.format(result_min), message_type='success')
+      
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, img_segmented)
 
