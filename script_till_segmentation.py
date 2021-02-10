@@ -63,7 +63,7 @@ def rgb_to_hsv_float(img,add_sat,add_value):
     img_hsv[:,:,1] = S*255 + add_sat
     img_hsv[:,:,2] = V*255 + add_value
     img_hsv = img_hsv.astype(np.uint8)
-    img_hsv[:, :, 1] = cv2.equalizeHist(img_hsv[:, :, 1])
+    #img_hsv[:, :, 1] = cv2.equalizeHist(img_hsv[:, :, 1])
     img_hsv[:,:,2] = cv2.equalizeHist(img_hsv[:,:,2])
     return img_hsv
 
