@@ -6,7 +6,7 @@
  "version": "1.0.0",
  "min_os_version_major": 6,
  "url": "https://raw.githubusercontent.com/Vegnics/farmbot_thesis/main/script_till_segmentation.json",
- "zip": "https://github.com/Vegnics/calibrate_camera/archive/master.zip",
+ "zip": "https://github.com/Vegnics/farmbot_thesis/archive/main.zip",
  "executable": "python",
  "args": ["calibrate_camera-master/scriptprincipal.py"]
 }
