@@ -3,7 +3,7 @@ from farmware_tools import get_config_value,device
 import cv2
 from cv2 import floodFill
 import numpy as np
-from numpy.fft import fft2,fftshift,ifft2,ifftshift
+from numpy.fft import fft,fft2,fftshift,ifft2,ifftshift
 import os
 
 def usb_camera_photo():
@@ -130,6 +130,36 @@ def hole_filling(mask,thresh):
             border = flooded[1]*255
             new_mask = new_mask | mask_temp | np.uint8(border)
     return new_mask
+
+def calc_centroid_distance(contour):
+    moments = cv2.moments(contour)
+    c_row=moments["m01"]/moments["m00"]
+    c_col=moments["m10"]/moments["m00"]
+    contour_array = np.array(contour)
+    contour_array = np.resize(contour_array,(-1,2))
+    d_col = contour_array[:,0] - c_col
+    d_row = contour_array[:,1] - c_row
+    c_funct = np.sqrt(np.square(d_col) + np.square(d_row))
+    return c_funct
+
+def calc_fourier_descriptor(c_function):
+    fourier_desc = fft(c_function)
+    return fourier_desc
+
+def calc_normalized_fourier(contour):
+    c_funct = calc_centroid_distance(contour)
+    fourier_desc = calc_fourier_descriptor2(c_funct)
+    normalized_descriptors = fourier_desc/fourier_desc[1]
+    normalized_descriptors = np.abs(normalized_descriptors)
+    return normalized_descriptors
+
+def compare_fourier_descriptors(fourier1,fourier2,N=10):
+    Fourier1 = fourier1[1:N+1]
+    Fourier2 = fourier2[1:N+1]
+    error = Fourier1 - Fourier2
+    error_sq = np.square(error)
+    rms_error = np.sqrt(np.sum(error_sq)/N)
+    return rms_error
 
 #OBTAINING CONSTANT DATA: HOMO KERNEL, CALIBRATION PARAMETERS
 dir_path = os.path.dirname(os.path.realpath(__file__))
