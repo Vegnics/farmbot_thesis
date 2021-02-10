@@ -8,5 +8,5 @@
  "url": "https://raw.githubusercontent.com/Vegnics/farmbot_thesis/main/script_till_segmentation.json",
  "zip": "https://github.com/Vegnics/farmbot_thesis/archive/main.zip",
  "executable": "python",
- "args": ["calibrate_camera-master/scriptprincipal.py"]
+ "args": ["farmbot_thesis-main/script_till_segmentation.py"]
 }
