@@ -181,6 +181,7 @@ V=[40,255]
 
 kernel_morph = cv2.getStructuringElement(cv2.MORPH_RECT,(2,2))
 
+#MORPHOLOGICAL OPERATIONS
 I_filtered_HSV = cv2.cvtColor(I_filtered,cv2.COLOR_BGR2HSV)
 mask = cv2.inRange(I_filtered_HSV,np.array([H[0],S[0],V[0]]),np.array([H[1],S[1],V[1]]))
 mask = remove_noise(mask,300)
@@ -188,8 +189,13 @@ mask = cv2.morphologyEx(mask,cv2.MORPH_DILATE,kernel_morph,iterations=3)
 mask = hole_filling(mask,500)
 mask = cv2.morphologyEx(mask,cv2.MORPH_ERODE,kernel_morph,iterations=3)
 
+#CONTOUR EXTRACTION AND ANALYSIS
 img_segmented= cv2.bitwise_and(I_filtered,I_filtered,mask=mask)
 _,contours,hier = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+for cnt in contours:
+    if len(cnt)>45:
+        descriptor = calc_normalized_fourier(cnt)
+        cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
 
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, img_segmented)
