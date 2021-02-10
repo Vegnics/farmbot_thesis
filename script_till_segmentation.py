@@ -67,6 +67,16 @@ def rgb_to_hsv_float(img,add_sat,add_value):
     img_hsv[:,:,2] = cv2.equalizeHist(img_hsv[:,:,2])
     return img_hsv
 
+def enhance_hsv(img):
+    img=np.clip(img,0.0,255.0)
+    img = np.uint8(img)
+    img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+    img_hsv[:, :, 1] = cv2.equalizeHist(img_hsv[:, :, 1])
+    img_hsv[:,:,2] = cv2.equalizeHist(img_hsv[:,:,2])
+    I_filtered = cv2.cvtColor(img_hsv,cv2.COLOR_HSV2BGR)
+    return I_filtered
+    
+
 def homomorph_filter_N1(src,kernel):
     src = src.astype(np.float32)
     Ln_I = np.log(src + 1)
@@ -94,8 +104,9 @@ butt_kernel = np.load(dir_path+'/'+'kernel_butt.npy')
 
 img=usb_camera_photo()
 I_filtered = homomorph_filter_N3(img,butt_kernel)
-I_hsv = rgb_to_hsv_float(I_filtered,0,0)
-I_filtered = cv2.cvtColor(I_hsv,cv2.COLOR_HSV2BGR)
+I_filtered = enhance_hsv(I_filtered)
+#I_hsv = rgb_to_hsv_float(I_filtered,0,0)
+#I_filtered = cv2.cvtColor(I_hsv,cv2.COLOR_HSV2BGR)
 directory = '/tmp/images/'
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, I_filtered)
