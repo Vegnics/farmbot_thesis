@@ -94,7 +94,7 @@ butt_kernel = np.load(dir_path+'/'+'kernel_butt.npy')
 
 img=usb_camera_photo()
 I_filtered = homomorph_filter_N3(img,butt_kernel)
-I_hsv = rgb_to_hsv_float(I_filtered,0,40)
+I_hsv = rgb_to_hsv_float(I_filtered,0,0)
 I_filtered = cv2.cvtColor(I_hsv,cv2.COLOR_HSV2BGR)
 directory = '/tmp/images/'
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
