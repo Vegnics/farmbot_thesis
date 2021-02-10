@@ -21,7 +21,7 @@ def usb_camera_photo():
     cam.set(cv2.CAP_PROP_SATURATION, 0.5)  # 0.3543
     cam.set(cv2.CAP_PROP_HUE, 0.5)  # 0.5
     end = time()
-    elaṕsed = end-start
+    elapsed = end-start
     device.log(message='setting time= {} seconds'.format(elapsed), message_type='success')
     failed_attempts = 0
     max_attempts = 5
