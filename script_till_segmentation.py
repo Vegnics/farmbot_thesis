@@ -13,16 +13,19 @@ def usb_camera_photo():
     discard_frames = 10  # number of frames to discard for auto-adjust
     max_attempts = 5  # number of failed discard frames before quit
     cam = cv2.VideoCapture(0)
+    start = time.time()
     cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # 640
     cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # 480
     cam.set(cv2.CAP_PROP_BRIGHTNESS, 0.35)  # 0.5
     cam.set(cv2.CAP_PROP_CONTRAST, 0.73)  # 0.733333
     cam.set(cv2.CAP_PROP_SATURATION, 0.5)  # 0.3543
     cam.set(cv2.CAP_PROP_HUE, 0.5)  # 0.5
-    device.log(message='setting ok', message_type='success')
+    end = time.time()
+    elaṕsed = end-start
+    device.log(message='setting time= {} seconds'.format(elapsed), message_type='success')
     failed_attempts = 0
     max_attempts = 5
-
+    
     for a in range(10):
         ret, image = cam.read()
         if not cam.grab():
@@ -105,8 +108,6 @@ butt_kernel = np.load(dir_path+'/'+'kernel_butt.npy')
 img=usb_camera_photo()
 I_filtered = homomorph_filter_N3(img,butt_kernel)
 I_filtered = enhance_hsv(I_filtered)
-#I_hsv = rgb_to_hsv_float(I_filtered,0,0)
-#I_filtered = cv2.cvtColor(I_hsv,cv2.COLOR_HSV2BGR)
 directory = '/tmp/images/'
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, I_filtered)
