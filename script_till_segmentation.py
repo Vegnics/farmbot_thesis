@@ -159,7 +159,7 @@ mask = hole_filling(mask,500)
 mask = cv2.morphologyEx(mask,cv2.MORPH_ERODE,kernel_morph,iterations=3)
 
 img_segmented= cv2.bitwise_and(I_filtered,I_filtered,mask=mask)
-contours,hier = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+# contours,hier = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
 
 
 cv2.imwrite(image_filename, I_filtered)
