@@ -102,14 +102,64 @@ def homomorph_filter_N3(src,kernel):
     outimg[:, :, 2] = nR
     return outimg
 
+def remove_noise(mask,thresh):
+    new_mask=np.zeros(mask.shape)
+    num_labels, labeled = cv2.connectedComponents(mask)
+    for label in range(num_labels):
+        num_pix = np.where(labeled==label)
+        if num_pix[0].size>thresh:
+            aux_mask = np.where((labeled==label)&(labeled>0),255,0)
+            new_mask = new_mask + aux_mask
+            new_mask = new_mask.astype(np.uint8)
+    return new_mask
+
+def hole_filling(mask,thresh):
+    new_mask = np.zeros(mask.shape,dtype=np.uint8)
+    mask_inv = cv2.bitwise_not(mask)
+    mask_out = np.zeros((mask.shape[0] + 2, mask.shape[1] + 2), dtype=np.uint8)
+    num_labels, labeled = cv2.connectedComponents(mask_inv)
+    for label in range(num_labels):
+        coords = zip(*np.where(labeled==label))
+        coords = list(coords)
+        if len(coords)<thresh and len(coords)>3:
+            length = len(coords)
+            middle = int(length/2)+1
+            mask_out_aux = np.zeros(mask_out.shape, dtype=np.uint8)
+            mask_temp = mask.copy()
+            flooded = cv2.floodFill(mask_temp, mask_out_aux, (coords[middle][1],coords[middle][0]), 255)
+            border = flooded[1]*255
+            new_mask = new_mask | mask_temp | np.uint8(border)
+    return new_mask
+
+#OBTAINING CONSTANT DATA: HOMO KERNEL, CALIBRATION PARAMETERS
 dir_path = os.path.dirname(os.path.realpath(__file__))
 butt_kernel = np.load(dir_path+'/'+'kernel_butt.npy')
 
+#OBTAINING THE IMAGE
 img=usb_camera_photo()
+
+#PREPROCESSING
 I_filtered = homomorph_filter_N3(img,butt_kernel)
 I_filtered = enhance_hsv(I_filtered)
 directory = '/tmp/images/'
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
+
+#SEGMENTATION
+H=[25,78]
+S=[35,255]
+V=[40,255]
+
+I_filtered_HSV = cv2.cvtColor(I_filtered,cv2.COLOR_BGR2HSV)
+mask = cv2.inRange(I_filtered_HSV,np.array([H[0],S[0],V[0]]),np.array([H[1],S[1],V[1]]))
+mask = remove_noise(mask,300)
+mask = cv2.morphologyEx(mask,cv2.MORPH_DILATE,kernel_morph2,iterations=3)
+mask = hole_filling(mask,500)
+mask = cv2.morphologyEx(mask,cv2.MORPH_ERODE,kernel_morph2,iterations=3)
+
+img_segmented= cv2.bitwise_and(I_filtered,I_filtered,mask=mask)
+contours,hier = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+
+
 cv2.imwrite(image_filename, I_filtered)
 
 
