@@ -149,12 +149,14 @@ H=[25,78]
 S=[35,255]
 V=[40,255]
 
+kernel_morph = cv2.getStructuringElement(cv2.MORPH_RECT,(2,2))
+
 I_filtered_HSV = cv2.cvtColor(I_filtered,cv2.COLOR_BGR2HSV)
 mask = cv2.inRange(I_filtered_HSV,np.array([H[0],S[0],V[0]]),np.array([H[1],S[1],V[1]]))
 mask = remove_noise(mask,300)
-mask = cv2.morphologyEx(mask,cv2.MORPH_DILATE,kernel_morph2,iterations=3)
+mask = cv2.morphologyEx(mask,cv2.MORPH_DILATE,kernel_morph,iterations=3)
 mask = hole_filling(mask,500)
-mask = cv2.morphologyEx(mask,cv2.MORPH_ERODE,kernel_morph2,iterations=3)
+mask = cv2.morphologyEx(mask,cv2.MORPH_ERODE,kernel_morph,iterations=3)
 
 img_segmented= cv2.bitwise_and(I_filtered,I_filtered,mask=mask)
 contours,hier = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
