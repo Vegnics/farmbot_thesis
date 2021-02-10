@@ -148,7 +148,7 @@ def calc_fourier_descriptor(c_function):
 
 def calc_normalized_fourier(contour):
     c_funct = calc_centroid_distance(contour)
-    fourier_desc = calc_fourier_descriptor2(c_funct)
+    fourier_desc = calc_fourier_descriptor(c_funct)
     normalized_descriptors = fourier_desc/fourier_desc[1]
     normalized_descriptors = np.abs(normalized_descriptors)
     return normalized_descriptors
