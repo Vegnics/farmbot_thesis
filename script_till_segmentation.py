@@ -158,7 +158,7 @@ def compare_fourier_descriptors(fourier1,fourier2,N=10):
     Fourier2 = fourier2[1:N+1]
     error = Fourier1 - Fourier2
     error_sq = np.square(error)
-    rms_error = np.sqrt(np.sum(error_sq)/N)
+    rms_error = np.sqrt(np.sum(error_sq))
     return rms_error
 
 #OBTAINING CONSTANT DATA: HOMO KERNEL, CALIBRATION PARAMETERS, DESCRIPTORS
