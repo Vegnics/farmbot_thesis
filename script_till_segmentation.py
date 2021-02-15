@@ -165,7 +165,7 @@ def compare_fourier_descriptors(fourier1,fourier2,N=10):
 dir_path = os.path.dirname(os.path.realpath(__file__))
 butt_kernel = np.load(dir_path+'/'+'kernel_butt.npy')
 descriptors = np.load(dir_path+'/'+'all_descriptors.npy')
-
+#
 #OBTAINING THE IMAGE
 img=usb_camera_photo()
 
