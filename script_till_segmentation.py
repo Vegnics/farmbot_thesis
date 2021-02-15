@@ -197,8 +197,8 @@ for cnt in contours:
     if len(cnt)>55:
         descriptor = calc_normalized_fourier(cnt)
         #cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
-        #for desc in descriptors: 
-        #    D = compare_fourier_descriptors(descriptor, desc, N=50)
+        for desc in descriptors: 
+            D = compare_fourier_descriptors(descriptor, desc, N=50)
         #    if D < 0.8:
         #        device.log(message='compare = {}'.format(D), message_type='success')
         #        cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
