@@ -199,8 +199,9 @@ for cnt in contours:
         #cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
         for desc in descriptors: 
             D = compare_fourier_descriptors(descriptor, desc, N=8)
+            device.log(message='compare = {}'.format(D), message_type='success')
             if D < 0.7:
-                device.log(message='compare = {}'.format(D), message_type='success')
+                device.log(message='Matched = {}'.format(D), message_type='success')
                 cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
                 break
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
