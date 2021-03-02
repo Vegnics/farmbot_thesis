@@ -170,7 +170,7 @@ device.log(message='descriptors shape= {}'.format(descriptors.shape), message_ty
 #OBTAINING THE IMAGE
 #img=usb_camera_photo()
 #img = cv2.imread(dir_path+'/'+'image_orig3_mod.jpeg',1)
-img = cv2.imread(dir_path+'/'+'regions_3_mod.png',1)
+img = cv2.imread(dir_path+'/'+'image_orig3_mod.jpeg',1)
 
 
 #PREPROCESSING
