@@ -202,7 +202,7 @@ for cnt in contours:
         descriptor = calc_normalized_fourier(cnt)
         cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
         for desc in descriptors: 
-            D = compare_fourier_descriptors(descriptor, desc, N=20)
+            D = compare_fourier_descriptors(descriptor, desc, N=60)
             mins.append(D)
             #device.log(message='compare = {}'.format(D), message_type='success')
             #if D < 1:
@@ -213,7 +213,7 @@ for cnt in contours:
         moments = cv2.moments(cnt)
         cx = int(moments['m10'] / moments['m00'])
         cy = int(moments['m01'] / moments['m00'])
-        cv2.putText(img_segmented, "min ={:1.2f}".format(min), (cx,cy), cv2.FONT_HERSHEY_SIMPLEX, 0.5, [255,0,0],2)
+        cv2.putText(img_segmented, "min ={:1.2f}".format(min), (cx,cy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,0,0],2)
         device.log(message='minimum = {:1.2f}'.format(min), message_type='success')
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, img_segmented)
