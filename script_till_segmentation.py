@@ -168,7 +168,8 @@ descriptors = np.load(dir_path+'/'+'all_descriptors.npy')
 device.log(message='descriptors shape= {}'.format(descriptors.shape), message_type='success')
 #
 #OBTAINING THE IMAGE
-img=usb_camera_photo()
+#img=usb_camera_photo()
+img = cv2.imread(dir_path+'/'+'image_orig1.jpeg',1)
 
 #PREPROCESSING
 I_filtered = homomorph_filter_N3(img,butt_kernel)
