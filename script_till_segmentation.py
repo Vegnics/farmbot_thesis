@@ -242,9 +242,9 @@ for cnt in contours:
         cx = int(moments['m10'] / moments['m00'])
         cy = int(moments['m01'] / moments['m00'])
         cv2.putText(img_segmented, "min ={:1.2f}".format(min), (cx,cy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,0,0],2)
-        device.log(message='min_time = {:1.2f}'.format(min_time), message_type='success')
-        device.log(message='max_time = {:1.2f}'.format(max_time), message_type='success')
-        device.log(message='mean_time = {:1.2f}'.format(mean_time), message_type='success')
+        device.log(message='min_time = {}'.format(min_time), message_type='success')
+        device.log(message='max_time = {}'.format(max_time), message_type='success')
+        device.log(message='mean_time = {}'.format(mean_time), message_type='success')
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, img_segmented)
 
