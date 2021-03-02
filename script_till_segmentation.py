@@ -210,6 +210,10 @@ for cnt in contours:
             #    cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
             #    break
         min = np.min(mins)
+        moments = cv2.moments(cnt)
+        cx = int(moments['m10'] / moments['m00'])
+        cy = int(moments['m01'] / moments['m00'])
+        cv2.putText(img_segmented, "min ={}".format(min), (cx,cy), cv2.FONT_HERSHEY_SIMPLEX, 1, [255,0,0],2)
         device.log(message='minimum = {}'.format(min), message_type='success')
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, img_segmented)
