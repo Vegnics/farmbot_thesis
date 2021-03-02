@@ -202,7 +202,7 @@ for cnt in contours:
         for desc in descriptors: 
             D = compare_fourier_descriptors(descriptor, desc, N=99)
             #device.log(message='compare = {}'.format(D), message_type='success')
-            if D < 0.25:
+            if D < 0.24:
                 device.log(message='Matched = {}'.format(D), message_type='success')
                 cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
                 break
