@@ -168,14 +168,18 @@ descriptors = np.load(dir_path+'/'+'all_descriptors.npy')
 device.log(message='descriptors shape= {}'.format(descriptors.shape), message_type='success')
 #
 #OBTAINING THE IMAGE
-#img=usb_camera_photo()
+img=usb_camera_photo()
 #img = cv2.imread(dir_path+'/'+'image_orig3_mod.jpeg',1)
 img = cv2.imread(dir_path+'/'+'image_orig3_mod.jpeg',1)
 
 
 #PREPROCESSING
+start = time()
 I_filtered = homomorph_filter_N3(img,butt_kernel)
 I_filtered = enhance_hsv(I_filtered)
+stop = time()
+device.log(message='homofilter_time= {}'.format(stop-start), message_type='success')
+
 directory = '/tmp/images/'
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 
@@ -187,36 +191,60 @@ V=[40,255]
 kernel_morph = cv2.getStructuringElement(cv2.MORPH_RECT,(2,2))
 
 #MORPHOLOGICAL OPERATIONS
+start = time()
 I_filtered_HSV = cv2.cvtColor(I_filtered,cv2.COLOR_BGR2HSV)
 mask = cv2.inRange(I_filtered_HSV,np.array([H[0],S[0],V[0]]),np.array([H[1],S[1],V[1]]))
+stop = time()
+device.log(message='segmentation_time= {}'.format(stop-start), message_type='success')
+
+start = time()
 mask = remove_noise(mask,300)
+stop = time()
+device.log(message='remove_noise_time= {}'.format(stop-start), message_type='success')
+
+start = time()
 mask = cv2.morphologyEx(mask,cv2.MORPH_DILATE,kernel_morph,iterations=3)
 mask = hole_filling(mask,500)
 mask = cv2.morphologyEx(mask,cv2.MORPH_ERODE,kernel_morph,iterations=3)
+stop = time()
+device.log(message='morphological_time= {}'.format(stop-start), message_type='success')
 
 #CONTOUR EXTRACTION AND ANALYSIS
+start = time()
 img_segmented= cv2.bitwise_and(I_filtered,I_filtered,mask=mask)
 _,contours,hier = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+stop = time()
+device.log(message='contour_extraction_time= {}'.format(stop-start), message_type='success')
 
 for cnt in contours:
     mins = []
+    times = []
     if len(cnt)>55:
+        start = time()
         descriptor = calc_normalized_fourier(cnt)
         cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
-        for desc in descriptors: 
+        for desc in descriptors:
+            start = time()
             D = compare_fourier_descriptors(descriptor, desc, N=60)
             mins.append(D)
+            stop = time()
+            times.append(stop-start)
             #device.log(message='compare = {}'.format(D), message_type='success')
             #if D < 1:
             #    device.log(message='Matched = {}'.format(D), message_type='success')
             #    cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
             #    break
+        min_time = np.min(times)
+        max_time = np.max(times)
+        mean_time = np.mean(times)
         min = np.min(mins)
         moments = cv2.moments(cnt)
         cx = int(moments['m10'] / moments['m00'])
         cy = int(moments['m01'] / moments['m00'])
         cv2.putText(img_segmented, "min ={:1.2f}".format(min), (cx,cy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,0,0],2)
-        device.log(message='minimum = {:1.2f}'.format(min), message_type='success')
+        device.log(message='min_time = {:1.2f}'.format(min_time), message_type='success')
+        device.log(message='max_time = {:1.2f}'.format(max_time), message_type='success')
+        device.log(message='mean_time = {:1.2f}'.format(mean_time), message_type='success')
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, img_segmented)
 
