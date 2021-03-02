@@ -195,17 +195,22 @@ mask = cv2.morphologyEx(mask,cv2.MORPH_ERODE,kernel_morph,iterations=3)
 #CONTOUR EXTRACTION AND ANALYSIS
 img_segmented= cv2.bitwise_and(I_filtered,I_filtered,mask=mask)
 _,contours,hier = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
+mins = []
 for cnt in contours:
+    mins = []
     if len(cnt)>55:
         descriptor = calc_normalized_fourier(cnt)
-        #cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
+        cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
         for desc in descriptors: 
             D = compare_fourier_descriptors(descriptor, desc, N=50)
+            mins.append(D)
             #device.log(message='compare = {}'.format(D), message_type='success')
-            if D < 1:
-                device.log(message='Matched = {}'.format(D), message_type='success')
-                cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
-                break
+            #if D < 1:
+            #    device.log(message='Matched = {}'.format(D), message_type='success')
+            #    cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
+            #    break
+         min = np.min(mins)
+         device.log(message='minimum = {}'.format(min), message_type='success')
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, img_segmented)
 
