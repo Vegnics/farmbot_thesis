@@ -183,8 +183,12 @@ def pixel2coord(pixelcoord,actual_pos,z_dist,intrinsics,rmatrix,tvec):
     P = np.resize(P, (3, 1))
     P[0] = P[0] - tx
     P[1] = P[1] - ty
-    P[2] = P[2]
+    P[2] = P[2] - tz
     P=np.matmul(rinvmat,P)
+    
+    P[0] = actual_pos[0] + P[0]
+    P[1] = actual_pos[1] + P[1]
+    P[2] = actual_pos[2] + P[2]
     #print(rmatrix)
     #print("X= {}, Y={}, Z={}".format(P[0],P[1],P[2])) #
     #print("\n")
@@ -281,7 +285,7 @@ for cnt in contours:
         moments = cv2.moments(cnt)
         cx = int(moments['m10'] / moments['m00'])
         cy = int(moments['m01'] / moments['m00'])
-        P = pixel2coord([cy,cx],485.0 ,intrinsics,rmatrix,tvec)
+        P = pixel2coord([cy,cx],[500.0,400.0,0.0],485.0 ,intrinsics,rmatrix,tvec)
         device.log(message='Found at= {}'.format(P), message_type='success')
         cv2.putText(img_segmented, "min ={:1.2f}".format(min), (cx,cy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,0,0],2)
         device.log(message='min_time = {}'.format(min_time), message_type='success')
