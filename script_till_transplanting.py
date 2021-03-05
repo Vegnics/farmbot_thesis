@@ -304,6 +304,7 @@ for cnt in contours:
         P = pixel2coord([cy,cx],[500.0,400.0,0.0],485.0 ,intrinsics,rmatrix,tvec)
         device.log(message='Found at= {}'.format(P), message_type='success')
         cv2.putText(img_segmented, "min ={:1.2f}".format(min), (cx,cy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,0,0],2)
+        move_absolute((int(P[0]),int(P[1]),int(P[2])),(0,0,-100),100)
         device.log(message='min_time = {}'.format(min_time), message_type='success')
         device.log(message='max_time = {}'.format(max_time), message_type='success')
         device.log(message='mean_time = {}'.format(mean_time), message_type='success')
