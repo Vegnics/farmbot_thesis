@@ -206,6 +206,7 @@ descriptors = np.load(dir_path+'/'+'all_descriptors.npy')
 tvec = np.load(dir_path+'/'+'tvec.npy')
 rmatrix = np.load(dir_path+'/'+'rmatrix.npy')
 intrinsics = np.load(dir_path+'/'+'nintrinsics.npy')   
+weeder=(20,553,-402)
 
 device.log(message='descriptors shape= {}'.format(descriptors.shape), message_type='success')
 #
@@ -264,6 +265,17 @@ _,contours,hier = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
 stop = time()
 device.log(message='contour_extraction_time= {}'.format(stop-start), message_type='success')
 
+move_absolute(weeder,(0,0,15),100)
+move_absolute(weeder,(0,0,0),100)
+move_absolute(weeder,(100,0,0),100)
+move_absolute(weeder,(100,0,100),100)
+move_absolute(weeder,(100,0,200),100)
+#write_pin(number=4, value=1, mode=0)
+#wait(100)
+#write_pin(number=4, value=0, mode=0)
+#wait(200)
+#write_pin(number=4, value=1, mode=0)
+
 for cnt in contours:
     mins = []
     times = []
@@ -296,4 +308,9 @@ for cnt in contours:
         device.log(message='max_time = {}'.format(max_time), message_type='success')
         device.log(message='mean_time = {}'.format(mean_time), message_type='success')
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
-cv2.imwrite(image_filename, img_segmented)
+cv2.imwrite(image_filename, img_segmented)        
+move_absolute(weeder,(120,0,200),100)
+move_absolute(weeder,(120,0,0),100)
+move_absolute(weeder,(0,0,0),100)
+move_absolute(weeder,(0,0,200),100)
+move_absolute((0,0,0),(0,0,0),100)
