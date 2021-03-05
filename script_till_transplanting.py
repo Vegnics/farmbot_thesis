@@ -183,7 +183,7 @@ def pixel2coord(pixelcoord,actual_pos,z_dist,intrinsics,rmatrix,tvec):
     P = np.resize(P, (3, 1))
     P[0] = P[0] - tx
     P[1] = P[1] - ty
-    P[2] = P[2] - tz
+    P[2] = P[2] 
     P=np.matmul(rinvmat,P)
     
     P[0] = actual_pos[0] + P[0]
