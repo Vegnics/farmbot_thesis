@@ -193,6 +193,11 @@ def pixel2coord(pixelcoord,actual_pos,z_dist,intrinsics,rmatrix,tvec):
     #print("X= {}, Y={}, Z={}".format(P[0],P[1],P[2])) #
     #print("\n")
     return P
+
+def move_absolute(position,offset,speed):
+    as_position= device.assemble_coordinate(position[0],position[1],position[2])
+    as_offset=device.assemble_coordinate(offset[0],offset[1],offset[2])
+    device.move_absolute(as_position, speed=speed, offset=as_offset)
     
 #OBTAINING CONSTANT DATA: HOMO KERNEL, CALIBRATION PARAMETERS, DESCRIPTORS
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -206,10 +211,9 @@ device.log(message='descriptors shape= {}'.format(descriptors.shape), message_ty
 #
 
 #MOVEMENTS
-capture_pos = device.assemble_coordinate(500,400,0)
-device.log(message='coord= {},{}'.format(capture_pos,type(capture_pos)), message_type='success')
-#
-device.move_absolute(capture_pos, speed=100, offset=device.assemble_coordinate(0,0,0))
+#capture_pos = device.assemble_coordinate(500,400,0)
+#device.move_absolute(capture_pos, speed=100, offset=device.assemble_coordinate(0,0,0))
+move_absolute((500,400,0),(0,0,0),100)
 
 #OBTAINING THE IMAGE
 img=usb_camera_photo()
