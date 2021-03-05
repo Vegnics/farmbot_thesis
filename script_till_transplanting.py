@@ -208,7 +208,7 @@ device.move_absolute(capture_pos)
 #OBTAINING THE IMAGE
 img=usb_camera_photo()
 #img = cv2.imread(dir_path+'/'+'image_orig3_mod.jpeg',1)
-img = cv2.imread(dir_path+'/'+'image_orig3_mod.jpeg',1)
+#img = cv2.imread(dir_path+'/'+'image_orig3_mod.jpeg',1)
 
 
 #PREPROCESSING
