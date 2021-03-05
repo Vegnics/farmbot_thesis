@@ -206,7 +206,7 @@ descriptors = np.load(dir_path+'/'+'all_descriptors.npy')
 tvec = np.load(dir_path+'/'+'tvec.npy')
 rmatrix = np.load(dir_path+'/'+'rmatrix.npy')
 intrinsics = np.load(dir_path+'/'+'nintrinsics.npy')   
-weeder=(20,551,-402)
+weeder=(35,553,-399)
 
 device.log(message='descriptors shape= {}'.format(descriptors.shape), message_type='success')
 #
