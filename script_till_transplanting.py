@@ -162,8 +162,8 @@ def compare_fourier_descriptors(fourier1,fourier2,N=10):
     return rms_error
 
 def pixel2coord(pixelcoord,actual_pos,z_dist,intrinsics,rmatrix,tvec):
-    vx=actual_pos[1]
-    uy=actual_pos[0]
+    vx=pixelcoord[1]
+    uy=pixelcoord[0]
     
     ppx=intrinsics[0,2]
     ppy=intrinsics[1,2]
