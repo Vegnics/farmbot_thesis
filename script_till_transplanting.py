@@ -205,7 +205,7 @@ device.log(message='descriptors shape= {}'.format(descriptors.shape), message_ty
 capture_pos = device.assemble_coordinate(500,400,0)
 device.log(message='coord= {},{}'.format(capture_pos,type(capture_pos)), message_type='success')
 #
-device.move_absolute(capture_pos, speed=100, offset=None)
+device.move_absolute(capture_pos, speed=100, offset=device.assemble_coordinate(0,0,0))
 
 #OBTAINING THE IMAGE
 img=usb_camera_photo()
