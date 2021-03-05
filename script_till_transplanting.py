@@ -161,12 +161,50 @@ def compare_fourier_descriptors(fourier1,fourier2,N=10):
     rms_error = np.sqrt(np.sum(error_sq)/N)
     return rms_error
 
+def pixel2coord(pixelcoord,actual_pos,z_dist,intrinsics,rmatrix,tvec):
+    vx=actual_pos[1]
+    uy=actual_pos[0]
+    
+    ppx=intrinsics[0,2]
+    ppy=intrinsics[1,2]
+    fx=intrinsics[0,0]
+    fy=intrinsics[1,1]
+
+    rinvmat=np.linalg.inv(rmatrix)
+    tx=tvec[0] #- 5 #it's possible to change the traslation value
+    ty=tvec[1] #- 5 #it's possible to change the traslation value
+    tz=tvec[2]
+    
+    X=abs(z_dist)*(vx-ppx)/fx
+    Y=abs(z_dist)*(uy-ppy)/fy
+    Z=abs(z_dist)
+    P=np.array([X,Y,Z])
+    t=np.resize(np.array([tx,ty,tz]),(3,1))
+    P = np.resize(P, (3, 1))
+    P[0] = P[0] - tx
+    P[1] = P[1] - ty
+    P[2] = P[2]
+    P=np.matmul(rinvmat,P)
+    #print(rmatrix)
+    #print("X= {}, Y={}, Z={}".format(P[0],P[1],P[2])) #
+    #print("\n")
+    return P
+    
 #OBTAINING CONSTANT DATA: HOMO KERNEL, CALIBRATION PARAMETERS, DESCRIPTORS
 dir_path = os.path.dirname(os.path.realpath(__file__))
 butt_kernel = np.load(dir_path+'/'+'kernel_butt.npy')
 descriptors = np.load(dir_path+'/'+'all_descriptors.npy')
+tvec = np.load(dir_path+'/'+'tvec.npy')
+rmatrix = np.load(dir_path+'/'+'rmatrix.npy')
+intrinsics = np.load(dir_path+'/'+'nintrinsics.npy')   
+
 device.log(message='descriptors shape= {}'.format(descriptors.shape), message_type='success')
 #
+
+#MOVEMENTS
+capture_pos = device.assemble_coordinate(500,400,0)
+device.move_absolute(capture_pos)
+
 #OBTAINING THE IMAGE
 img=usb_camera_photo()
 #img = cv2.imread(dir_path+'/'+'image_orig3_mod.jpeg',1)
@@ -241,6 +279,8 @@ for cnt in contours:
         moments = cv2.moments(cnt)
         cx = int(moments['m10'] / moments['m00'])
         cy = int(moments['m01'] / moments['m00'])
+        P = pixel2coord([cy,cx],485.0 ,intrinsics,rmatrix,tvec)
+        device.log(message='Found at= {}'.format(P), message_type='success')
         cv2.putText(img_segmented, "min ={:1.2f}".format(min), (cx,cy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,0,0],2)
         device.log(message='min_time = {}'.format(min_time), message_type='success')
         device.log(message='max_time = {}'.format(max_time), message_type='success')
