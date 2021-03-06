@@ -171,7 +171,7 @@ def compare_fourier_descriptors(fourier1,fourier2,N=10):
     Fourier2 = fourier2[1:N+1]
     error = Fourier1 - Fourier2
     error_sq = np.square(error)
-    multipliers = np.linspace(1,10,N)
+    multipliers = np.linspace(1,100,N)
     poderated_error_sq = error_sq * multipliers
     rms_error = np.sqrt(np.sum(poderated_error_sq)/N)
     return rms_error
