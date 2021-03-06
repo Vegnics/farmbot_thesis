@@ -239,7 +239,7 @@ img=usb_camera_photo()
 start = time()
 #I_filtered = homomorph_filter_N3(img,butt_kernel)
 #I_filtered = enhance_hsv(I_filtered)
-I_filtered = preprocess(img,butt_kernel)
+I_filtered = img#preprocess(img,butt_kernel)
 
 stop = time()
 device.log(message='homofilter_time= {}'.format(stop-start), message_type='success')
