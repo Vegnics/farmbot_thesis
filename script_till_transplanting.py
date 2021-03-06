@@ -91,6 +91,19 @@ def homomorph_filter_N1(src,kernel):
     I_filtered = np.exp(I_filtered) - 1
     return I_filtered
 
+def preprocess(src,kernel):
+    src_hsv=cv2.cvtColor(src,cv2.COLOR_BGR2HSV)
+    val = src_hsv[:,:,2]
+    I_filtered = homomorph_filter_N3(src,kernel)
+    I_filtered = np.clip(I_filtered, 0.0, 255.0)
+    I_filtered = np.uint8(I_filtered)
+    img_hsv = cv2.cvtColor(I_filtered, cv2.COLOR_BGR2HSV)
+    # img_hsv[:, :, 1] = cv2.equalizeHist(img_hsv[:, :, 1])
+    #img_hsv[:, :, 2] = cv2.equalizeHist(img_hsv[:, :, 2])
+    img_hsv[:, :, 2] = val
+    I_filtered = cv2.cvtColor(img_hsv, cv2.COLOR_HSV2BGR)
+    return I_filtered
+
 def homomorph_filter_N3(src,kernel):
     outimg = np.zeros(src.shape)
     B, G, R = cv2.split(src)
@@ -224,8 +237,10 @@ img=usb_camera_photo()
 
 #PREPROCESSING
 start = time()
-I_filtered = homomorph_filter_N3(img,butt_kernel)
-I_filtered = enhance_hsv(I_filtered)
+#I_filtered = homomorph_filter_N3(img,butt_kernel)
+#I_filtered = enhance_hsv(I_filtered)
+I_filtered = preprocess(img,butt_kernel)
+
 stop = time()
 device.log(message='homofilter_time= {}'.format(stop-start), message_type='success')
 
