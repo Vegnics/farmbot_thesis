@@ -220,7 +220,12 @@ butt_kernel = np.load(dir_path+'/'+'kernel_butt.npy')
 descriptors = np.load(dir_path+'/'+'all_descriptors.npy')
 tvec = np.load(dir_path+'/'+'tvec.npy')
 rmatrix = np.load(dir_path+'/'+'rmatrix.npy')
-intrinsics = np.load(dir_path+'/'+'nintrinsics.npy')   
+intrinsics = np.load(dir_path+'/'+'nintrinsics.npy')
+matrix=np.load(dir_path+'/'+'array1.npy')
+matrix2=np.load(dir_path+'/'+'array2.npy')
+matrix3=np.load(dir_path+'/'+'array3.npy')
+matrix4=np.load(dir_path+'/'+'array4.npy')
+
 weeder=(23,551,-399)
 
 device.log(message='descriptors shape= {}'.format(descriptors.shape), message_type='success')
@@ -286,10 +291,10 @@ image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, img_segmented)  
 
 #####move_absolute(weeder,(0,0,15),100)
-#move_absolute(weeder,(0,0,0),100)
-#move_absolute(weeder,(100,0,0),100)
-#move_absolute(weeder,(100,0,100),100)
-#move_absolute(weeder,(100,0,260),100)
+move_absolute(weeder,(0,0,0),100)
+move_absolute(weeder,(100,0,0),100)
+move_absolute(weeder,(100,0,100),100)
+move_absolute(weeder,(100,0,260),100)
 
 #write_pin(number=4, value=1, mode=0)
 #wait(100)
@@ -318,6 +323,12 @@ for cnt in contours:
                 P = pixel2coord([cy,cx],[500.0,400.0,0.0],485.0 ,intrinsics,rmatrix,tvec)
                 device.log(message='Matched = {}'.format(D), message_type='success')
                 cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
+                
+                aux=np.abs(P[0]-matrix[:,:,0])+np.abs(P[1]-matrix[:,:,1])
+                (min,_,minloc,_)=cv2.minMaxLoc(aux,None)
+                xmat=minloc[0]-1
+                ymat=minloc[1]-1
+                x,y=matrix[ymat,xmat]
                 move_absolute((int(P[0]),int(P[1]),-100),(0,0,0),100)
                 break
         min_time = np.min(times)
