@@ -282,6 +282,9 @@ _,contours,hier = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
 stop = time()
 device.log(message='contour_extraction_time= {}'.format(stop-start), message_type='success')
 
+image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
+cv2.imwrite(image_filename, img_segmented)  
+
 #####move_absolute(weeder,(0,0,15),100)
 #move_absolute(weeder,(0,0,0),100)
 #move_absolute(weeder,(100,0,0),100)
