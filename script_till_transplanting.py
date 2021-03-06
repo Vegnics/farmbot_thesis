@@ -297,7 +297,7 @@ device.log(message='contour_extraction_time= {}'.format(stop-start), message_typ
 for cnt in contours:
     mins = []
     times = []
-    if len(cnt)>55:
+    if len(cnt)>61:
         start = time()
         descriptor = calc_normalized_fourier(cnt)
         cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
@@ -308,18 +308,23 @@ for cnt in contours:
             stop = time()
             times.append(stop-start)
             #device.log(message='compare = {}'.format(D), message_type='success')
-            #if D < 1:
-            #    device.log(message='Matched = {}'.format(D), message_type='success')
-            #    cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
-            #    break
+            if D < 0.8:
+                moments = cv2.moments(cnt)
+                cx = int(moments['m10'] / moments['m00'])
+                cy = int(moments['m01'] / moments['m00'])
+                P = pixel2coord([cy,cx],[500.0,400.0,0.0],485.0 ,intrinsics,rmatrix,tvec)
+                device.log(message='Matched = {}'.format(D), message_type='success')
+                cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
+                move_absolute((int(P[0]),int(P[1]),-100),(0,0,0),100)
+                break
         min_time = np.min(times)
         max_time = np.max(times)
         mean_time = np.mean(times)
         min = np.min(mins)
-        moments = cv2.moments(cnt)
-        cx = int(moments['m10'] / moments['m00'])
-        cy = int(moments['m01'] / moments['m00'])
-        P = pixel2coord([cy,cx],[500.0,400.0,0.0],485.0 ,intrinsics,rmatrix,tvec)
+        #moments = cv2.moments(cnt)
+        #cx = int(moments['m10'] / moments['m00'])
+        #cy = int(moments['m01'] / moments['m00'])
+        #P = pixel2coord([cy,cx],[500.0,400.0,0.0],485.0 ,intrinsics,rmatrix,tvec)
         device.log(message='Found at= {}'.format(P), message_type='success')
         cv2.putText(img_segmented, "min ={:1.2f}".format(min), (cx,cy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,0,0],2)
         #move_absolute((int(P[0]),int(P[1]),-100),(0,0,0),100)
