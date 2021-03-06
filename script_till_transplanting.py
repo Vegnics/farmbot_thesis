@@ -232,8 +232,8 @@ device.log(message='descriptors shape= {}'.format(descriptors.shape), message_ty
 move_absolute((500,400,0),(0,0,0),100)
 
 #OBTAINING THE IMAGE
-#img=usb_camera_photo()
-img = cv2.imread(dir_path+'/'+'image_orig3.jpeg',1)
+img=usb_camera_photo()
+#img = cv2.imread(dir_path+'/'+'image_orig3.jpeg',1)
 #img = cv2.imread(dir_path+'/'+'image_orig3_mod.jpeg',1)
 
 
