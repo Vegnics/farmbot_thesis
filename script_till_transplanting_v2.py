@@ -366,8 +366,8 @@ if len(seedlings)>0:
         device.log(message='xs= {}, ys= {}'.format(xs,ys), message_type='success')
         aux=np.abs(xs-matrix[:,:,0])+np.abs(ys-matrix[:,:,1])
         (min,_,minloc,_)=cv2.minMaxLoc(aux,None)
-        xmat=minloc[0]-1
-        ymat=minloc[1]-1
+        xmat=minloc[0]
+        ymat=minloc[1]
         device.log(message='xmat= {}, ymat= {}'.format(xmat,ymat), message_type='success')
         x,y=matrix[ymat,xmat]
         move_absolute((int(x),int(y),-161),(0,0,0),100)
