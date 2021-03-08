@@ -230,7 +230,7 @@ weeder=(33,554,-401)
 gripper_pin = 4
 gripper_down = 0
 gripper_up = 1
-set_pin_io_mode(1,gripper_pin)
+device.set_pin_io_mode(1,gripper_pin)
 
 device.log(message='descriptors shape= {}'.format(descriptors.shape), message_type='success')
 #
