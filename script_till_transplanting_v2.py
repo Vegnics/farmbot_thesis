@@ -361,10 +361,10 @@ if len(seedlings)>0:
         xs,ys=seedling[0]
         aux=np.abs(xs-matrix[:,:,0])+np.abs(ys-matrix[:,:,1])
         (min,_,minloc,_)=cv2.minMaxLoc(aux,None)
-    #    xmat=minloc[0]-1
-    #    ymat=minloc[1]-1
-    #    x,y=matrix[ymat,xmat]
-    #    move_absolute(x,y,-100),(0,0,0),100)
+        xmat=minloc[0]-1
+        ymat=minloc[1]-1
+        x,y=matrix[ymat,xmat]
+        move_absolute(x,y,-100),(0,0,0),100)
         device.log(message='Seedling found at = {} with r= {} and A= {}'.format(seedling[0],seedling[1],seedling[2]), message_type='success')
     move_absolute(weeder,(120,0,200),100)
     move_absolute(weeder,(120,0,0),100)
