@@ -374,7 +374,7 @@ if len(seedlings)>0:
     move_absolute(weeder,(100,0,100),100)
     move_absolute(weeder,(100,0,260),100)
     for seedling in seedlings:
-        next_xs,next_ys = get_hole_coords(matrix_2,seedling_class_a_num)
+        next_xs,next_ys = get_hole_coords(matrix2,seedling_class_a_num)
         seedling_class_a_num += 1
       
         device.log(message='seedling= {}'.format(seedling), message_type='success')
