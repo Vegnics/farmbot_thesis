@@ -345,12 +345,13 @@ for cnt in contours:
         #device.log(message='min_time = {}'.format(min_time), message_type='success')
         #device.log(message='max_time = {}'.format(max_time), message_type='success')
         #device.log(message='mean_time = {}'.format(mean_time), message_type='success')
+
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, img_segmented)
 
 device.log(message='Seedling detection OK', message_type='success')
 
-if len(seedling)>0:
+if len(seedlings)>0:
     move_absolute(weeder,(0,0,0),100)
     move_absolute(weeder,(100,0,0),100)
     move_absolute(weeder,(100,0,100),100)
