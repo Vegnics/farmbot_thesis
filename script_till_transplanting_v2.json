@@ -1,0 +1,12 @@
+{
+ "package": "Programa_de_tesis_2",
+ "language": "python",
+ "author": "Paulo Linares",
+ "description": "Basics movements",
+ "version": "1.0.0",
+ "min_os_version_major": 6,
+ "url": "https://raw.githubusercontent.com/Vegnics/farmbot_thesis/main/script_till_transplanting_v2.json",
+ "zip": "https://github.com/Vegnics/farmbot_thesis/archive/main.zip",
+ "executable": "python",
+ "args": ["farmbot_thesis-main/script_till_transplanting_v2.py"]
+}
