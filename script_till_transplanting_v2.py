@@ -364,7 +364,7 @@ if len(seedlings)>0:
         xmat=minloc[0]-1
         ymat=minloc[1]-1
         x,y=matrix[ymat,xmat]
-        move_absolute(int(x),int(y),-100),(0,0,0),100)
+        move_absolute((int(x),int(y),-100),(0,0,0),100)
         device.log(message='Seedling found at = {} with r= {} and A= {}'.format(seedling[0],seedling[1],seedling[2]), message_type='success')
     move_absolute(weeder,(120,0,200),100)
     move_absolute(weeder,(120,0,0),100)
