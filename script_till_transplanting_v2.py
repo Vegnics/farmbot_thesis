@@ -217,7 +217,9 @@ def move_absolute(position,offset,speed):
 def get_hole_coords(tray_mat,seedling_num):
     ymat = seedling_num % 12
     xmat = int(seedling_num / 12)
-    x,y=tray_mat[ymat,xmat]
+    pos = tray_mat[ymat,xmat]
+    x = pos[0]
+    y = pos[1]
     return x,y
 
 #OBTAINING CONSTANT DATA: HOMO KERNEL, CALIBRATION PARAMETERS, DESCRIPTORS
