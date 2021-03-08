@@ -302,6 +302,9 @@ move_absolute(weeder,(100,0,260),100)
 #wait(200)
 #write_pin(number=4, value=1, mode=0)
 
+#FIND CONTOURS, DETECT SEEDLINGS AND CLASSIFY
+seedlings=[]
+#seedlings[i]=[[xi,yi],ri,ai] localization,radius,area
 for cnt in contours:
     mins = []
     times = []
@@ -320,36 +323,51 @@ for cnt in contours:
                 moments = cv2.moments(cnt)
                 cx = int(moments['m10'] / moments['m00'])
                 cy = int(moments['m01'] / moments['m00'])
-                P = pixel2coord([cy,cx],[500.0,400.0,0.0],485.0 ,intrinsics,rmatrix,tvec)
+                (_cx,_cy),r  = cv2.minEnclosingCircle(cnt)
+                P = pixel2coord([cy,cx],[500.0,400.0,0.0],485.0 ,intrinsics,rmatrix,tvec)#Change Z
                 device.log(message='Matched = {}'.format(D), message_type='success')
                 cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
-                
-                aux=np.abs(P[0]-matrix[:,:,0])+np.abs(P[1]-matrix[:,:,1])
-                (min,_,minloc,_)=cv2.minMaxLoc(aux,None)
-                xmat=minloc[0]-1
-                ymat=minloc[1]-1
-                x,y=matrix[ymat,xmat]
-                move_absolute(x,y,-100),(0,0,0),100)
+                seedlings.append([P[0],P[1],r,moments['m00']])
+                #aux=np.abs(P[0]-matrix[:,:,0])+np.abs(P[1]-matrix[:,:,1])
+                #(min,_,minloc,_)=cv2.minMaxLoc(aux,None)
+                #xmat=minloc[0]-1
+                #ymat=minloc[1]-1
+                #x,y=matrix[ymat,xmat]
+                #move_absolute(x,y,-100),(0,0,0),100)
                 break
         min_time = np.min(times)
         max_time = np.max(times)
         mean_time = np.mean(times)
         min = np.min(mins)
-        #moments = cv2.moments(cnt)
-        #cx = int(moments['m10'] / moments['m00'])
-        #cy = int(moments['m01'] / moments['m00'])
-        #P = pixel2coord([cy,cx],[500.0,400.0,0.0],485.0 ,intrinsics,rmatrix,tvec)
-        device.log(message='Found at= {}'.format(P), message_type='success')
-        cv2.putText(img_segmented
-, "min ={:1.2f}".format(min), (cx,cy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,0,0],2)
+        #device.log(message='Found at= {}'.format(P), message_type='success')
+        #cv2.putText(img_segmented, "min ={:1.2f}".format(min), (cx,cy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,0,0],2)
         #move_absolute((int(P[0]),int(P[1]),-100),(0,0,0),100)
-        device.log(message='min_time = {}'.format(min_time), message_type='success')
-        device.log(message='max_time = {}'.format(max_time), message_type='success')
-        device.log(message='mean_time = {}'.format(mean_time), message_type='success')
+        #device.log(message='min_time = {}'.format(min_time), message_type='success')
+        #device.log(message='max_time = {}'.format(max_time), message_type='success')
+        #device.log(message='mean_time = {}'.format(mean_time), message_type='success')
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
-cv2.imwrite(image_filename, img_segmented)        
-#move_absolute(weeder,(120,0,200),100)
-#move_absolute(weeder,(120,0,0),100)
-#move_absolute(weeder,(0,0,0),100)
-#move_absolute(weeder,(0,0,200),100)
-#move_absolute((0,0,0),(0,0,0),100)
+cv2.imwrite(image_filename, img_segmented)
+
+device.log(message='Seedling detection OK', message_type='success')
+
+if len(seedling)>0:
+    move_absolute(weeder,(0,0,0),100)
+    move_absolute(weeder,(100,0,0),100)
+    move_absolute(weeder,(100,0,100),100)
+    move_absolute(weeder,(100,0,260),100)
+    for seedling in seedlings:
+        xs,ys=seedling[0]
+        aux=np.abs(xs-matrix[:,:,0])+np.abs(ys-matrix[:,:,1])
+        (min,_,minloc,_)=cv2.minMaxLoc(aux,None)
+        xmat=minloc[0]-1
+        ymat=minloc[1]-1
+        x,y=matrix[ymat,xmat]
+        move_absolute(x,y,-100),(0,0,0),100)
+    move_absolute(weeder,(120,0,200),100)
+    move_absolute(weeder,(120,0,0),100)
+    move_absolute(weeder,(0,0,0),100)
+    move_absolute(weeder,(0,0,200),100)
+    
+move_absolute((0,0,0),(0,0,0),100)
+device.log(message='Process finished OK', message_type='success')   
+
