@@ -256,7 +256,7 @@ image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 
 #SEGMENTATION
 H=[20,85]
-S=[30,255]
+S=[40,255]
 V=[40,255]
 
 kernel_morph = cv2.getStructuringElement(cv2.MORPH_RECT,(2,2))
