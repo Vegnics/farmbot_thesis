@@ -374,7 +374,7 @@ if len(seedlings)>0:
         ymat=minloc[1]
         device.log(message='xmat= {}, ymat= {}'.format(xmat,ymat), message_type='success')
         x,y=matrix[ymat,xmat]
-        move_absolute((int(x),int(y),-181),(0,0,0),100)
+        move_absolute((int(x),int(y),-201),(0,0,0),100)
         device.write_pin(gripper_pin,gripper_down,0)        
         device.wait(600)
         device.write_pin(gripper_pin,gripper_up,0)
