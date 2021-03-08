@@ -291,10 +291,10 @@ image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, img_segmented)  
 
 #####move_absolute(weeder,(0,0,15),100)
-move_absolute(weeder,(0,0,0),100)
-move_absolute(weeder,(100,0,0),100)
-move_absolute(weeder,(100,0,100),100)
-move_absolute(weeder,(100,0,260),100)
+#move_absolute(weeder,(0,0,0),100)
+#move_absolute(weeder,(100,0,0),100)
+#move_absolute(weeder,(100,0,100),100)
+#move_absolute(weeder,(100,0,260),100)
 
 #write_pin(number=4, value=1, mode=0)
 #wait(100)
@@ -351,21 +351,21 @@ cv2.imwrite(image_filename, img_segmented)
 
 device.log(message='Seedling detection OK', message_type='success')
 
-"""
+
 if len(seedlings)>0:
     move_absolute(weeder,(0,0,0),100)
     move_absolute(weeder,(100,0,0),100)
     move_absolute(weeder,(100,0,100),100)
     move_absolute(weeder,(100,0,260),100)
-    for seedling in seedlings:
-        xs,ys=seedling[0]
-        aux=np.abs(xs-matrix[:,:,0])+np.abs(ys-matrix[:,:,1])
-        (min,_,minloc,_)=cv2.minMaxLoc(aux,None)
-        xmat=minloc[0]-1
-        ymat=minloc[1]-1
-        x,y=matrix[ymat,xmat]
-        move_absolute(x,y,-100),(0,0,0),100)
-        device.log(message='Seedling found at = {} with r= {} and A= {}'.format(seedling[0],seedling[1],seedling[2]), message_type='success')
+    #for seedling in seedlings:
+    #    xs,ys=seedling[0]
+    #    aux=np.abs(xs-matrix[:,:,0])+np.abs(ys-matrix[:,:,1])
+    #    (min,_,minloc,_)=cv2.minMaxLoc(aux,None)
+    #    xmat=minloc[0]-1
+    #    ymat=minloc[1]-1
+    #    x,y=matrix[ymat,xmat]
+    #    move_absolute(x,y,-100),(0,0,0),100)
+    #    device.log(message='Seedling found at = {} with r= {} and A= {}'.format(seedling[0],seedling[1],seedling[2]), message_type='success')
     move_absolute(weeder,(120,0,200),100)
     move_absolute(weeder,(120,0,0),100)
     move_absolute(weeder,(0,0,0),100)
@@ -373,4 +373,3 @@ if len(seedlings)>0:
     
 move_absolute((0,0,0),(0,0,0),100)
 device.log(message='Process finished OK', message_type='success')   
-"""
