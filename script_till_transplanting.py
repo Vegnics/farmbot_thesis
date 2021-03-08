@@ -329,7 +329,7 @@ for cnt in contours:
                 xmat=minloc[0]-1
                 ymat=minloc[1]-1
                 x,y=matrix[ymat,xmat]
-                move_absolute((int(P[0]),int(P[1]),-100),(0,0,0),100)
+                move_absolute(x,y,-100),(0,0,0),100)
                 break
         min_time = np.min(times)
         max_time = np.max(times)
