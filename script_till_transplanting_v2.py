@@ -259,8 +259,8 @@ directory = '/tmp/images/'
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 
 #SEGMENTATION
-H=[20,80]
-S=[40,255]
+H=[20,78]
+S=[43,255]
 V=[40,255]
 
 kernel_morph = cv2.getStructuringElement(cv2.MORPH_RECT,(2,2))
@@ -374,7 +374,7 @@ if len(seedlings)>0:
         ymat=minloc[1]
         device.log(message='xmat= {}, ymat= {}'.format(xmat,ymat), message_type='success')
         x,y=matrix[ymat,xmat]
-        move_absolute((int(x),int(y),-201),(0,0,0),100)
+        move_absolute((int(x),int(y+7),-201),(0,0,0),100) # I add 7 mm to Y
         device.write_pin(gripper_pin,gripper_down,0)        
         device.wait(600)
         device.write_pin(gripper_pin,gripper_up,0)
