@@ -358,6 +358,7 @@ if len(seedlings)>0:
     move_absolute(weeder,(100,0,100),100)
     move_absolute(weeder,(100,0,260),100)
     for seedling in seedlings:
+        device.log(message='seedling= {}'.format(seedling), message_type='success')
         xs,ys=seedling[0]
         device.log(message='xs= {}, ys= {}'.format(xs,ys), message_type='success')
         aux=np.abs(xs-matrix[:,:,0])+np.abs(ys-matrix[:,:,1])
