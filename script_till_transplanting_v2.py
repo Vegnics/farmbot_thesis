@@ -259,7 +259,7 @@ directory = '/tmp/images/'
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 
 #SEGMENTATION
-H=[20,85]
+H=[20,80]
 S=[40,255]
 V=[40,255]
 
