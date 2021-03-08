@@ -227,6 +227,10 @@ matrix3=np.load(dir_path+'/'+'array3.npy')
 matrix4=np.load(dir_path+'/'+'array4.npy')
 
 weeder=(33,554,-401)
+gripper_pin = 4
+gripper_down = 0
+gripper_up = 1
+set_pin_io_mode(1,gripper_pin)
 
 device.log(message='descriptors shape= {}'.format(descriptors.shape), message_type='success')
 #
@@ -371,6 +375,13 @@ if len(seedlings)>0:
         device.log(message='xmat= {}, ymat= {}'.format(xmat,ymat), message_type='success')
         x,y=matrix[ymat,xmat]
         move_absolute((int(x),int(y),-181),(0,0,0),100)
+        device.write_pin(gripper_pin,gripper_down,0)        
+        device.wait(600)
+        device.write_pin(gripper_pin,gripper_up,0)
+        device.wait(600)
+        device.write_pin(gripper_pin,gripper_down,0)        
+        device.wait(600)
+        device.write_pin(gripper_pin,gripper_up,0)   
         device.log(message='Seedling found at = {},{} with r= {} and A= {}'.format(xs,ys,seedling[2],seedling[3]), message_type='success')
     move_absolute(weeder,(120,0,200),100)
     move_absolute(weeder,(120,0,0),100)
