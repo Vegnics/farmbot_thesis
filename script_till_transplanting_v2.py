@@ -360,6 +360,8 @@ if len(seedlings)>0:
     for seedling in seedlings:
         device.log(message='seedling= {}'.format(seedling), message_type='success')
         xs,ys=seedling[0]
+        xs=xs[0]
+        ys=ys[0]
         device.log(message='xs= {}, ys= {}'.format(xs,ys), message_type='success')
         aux=np.abs(xs-matrix[:,:,0])+np.abs(ys-matrix[:,:,1])
         (min,_,minloc,_)=cv2.minMaxLoc(aux,None)
