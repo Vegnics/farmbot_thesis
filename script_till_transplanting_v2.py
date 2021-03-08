@@ -214,6 +214,12 @@ def move_absolute(position,offset,speed):
     as_offset=device.assemble_coordinate(offset[0],offset[1],offset[2])
     device.move_absolute(as_position, speed=speed, offset=as_offset)
     
+def get_hole_coords(tray_mat,seedling_num):
+    ymat = seedling_num % 12
+    xmat = int(seedling_num / 12)
+    x,y=tray_mat[ymat,xmat]
+    return x,y
+
 #OBTAINING CONSTANT DATA: HOMO KERNEL, CALIBRATION PARAMETERS, DESCRIPTORS
 dir_path = os.path.dirname(os.path.realpath(__file__))
 butt_kernel = np.load(dir_path+'/'+'kernel_butt.npy')
@@ -308,6 +314,10 @@ cv2.imwrite(image_filename, img_segmented)
 
 #FIND CONTOURS, DETECT SEEDLINGS AND CLASSIFY
 seedlings=[]
+seedling_class_a_num = 0
+seedling_class_b_num = 0
+seedling_class_c_num = 0
+
 #seedlings[i]=[[xi,yi],ri,ai] localization,radius,area
 for cnt in contours:
     mins = []
@@ -362,6 +372,9 @@ if len(seedlings)>0:
     move_absolute(weeder,(100,0,100),100)
     move_absolute(weeder,(100,0,260),100)
     for seedling in seedlings:
+        next_xs,next_ys = get_hole_coords(matrix_2,seedling_class_a_num)
+        seedling_class_a_num += 1
+      
         device.log(message='seedling= {}'.format(seedling), message_type='success')
         xs=seedling[0]
         ys=seedling[1]
@@ -374,14 +387,27 @@ if len(seedlings)>0:
         ymat=minloc[1]
         device.log(message='xmat= {}, ymat= {}'.format(xmat,ymat), message_type='success')
         x,y=matrix[ymat,xmat]
-        move_absolute((int(x),int(y+7),-201),(0,0,0),100) # I add 7 mm to Y
-        device.write_pin(gripper_pin,gripper_down,0)        
+        x = x
+        y = y+11
+        #move_absolute((int(x),int(y+11),-201),(0,0,0),100) # I add 11 mm to Y
+        move_absolute((x-22,y-10,-205),(0,0,0),100)
+        move_absolute((x-22,y-10,-270),(0,0,0),100)
+        move_absolute((x,y,-270),(0,0,0),100)
+        move_absolute((x,y,-291),(0,0,0),100)
+        device.wait(500)
+        device.write_pin(gripper_pin,gripper_down,0)
+        device.wait(2000)
+        move_absolute((next_xs,next_ys,-215),(0,0,0),100)
+        device.wait(500)
+        move_absolute((next_xs,next_ys,-160),(0,0,0),100)
+        move_absolute((next_xs,next_ys,-278),(0,0,0),100)
+        device.write_pin(gripper_pin,gripper_up,0)
+        device.wait(600)
+        device.write_pin(gripper_pin,gripper_down,0)
         device.wait(600)
         device.write_pin(gripper_pin,gripper_up,0)
         device.wait(600)
-        device.write_pin(gripper_pin,gripper_down,0)        
-        device.wait(600)
-        device.write_pin(gripper_pin,gripper_up,0)   
+        move_absolute((next_xs,next_ys,-205),(0,0,0),100)
         device.log(message='Seedling found at = {},{} with r= {} and A= {}'.format(xs,ys,seedling[2],seedling[3]), message_type='success')
     move_absolute(weeder,(120,0,200),100)
     move_absolute(weeder,(120,0,0),100)
