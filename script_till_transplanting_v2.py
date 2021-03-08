@@ -226,7 +226,7 @@ matrix2=np.load(dir_path+'/'+'array2.npy')
 matrix3=np.load(dir_path+'/'+'array3.npy')
 matrix4=np.load(dir_path+'/'+'array4.npy')
 
-weeder=(23,551,-399)
+weeder=(33,554,-401)
 
 device.log(message='descriptors shape= {}'.format(descriptors.shape), message_type='success')
 #
