@@ -359,7 +359,8 @@ if len(seedlings)>0:
     move_absolute(weeder,(100,0,260),100)
     for seedling in seedlings:
         device.log(message='seedling= {}'.format(seedling), message_type='success')
-        xs,ys=seedling[0]
+        xs=seedling[0]
+        ys=seedling[1]
         xs=xs[0]
         ys=ys[0]
         device.log(message='xs= {}, ys= {}'.format(xs,ys), message_type='success')
@@ -370,7 +371,7 @@ if len(seedlings)>0:
         device.log(message='xmat= {}, ymat= {}'.format(xmat,ymat), message_type='success')
         x,y=matrix[ymat,xmat]
         move_absolute((int(x),int(y),-100),(0,0,0),100)
-        device.log(message='Seedling found at = {} with r= {} and A= {}'.format(seedling[0],seedling[1],seedling[2]), message_type='success')
+        device.log(message='Seedling found at = {},{} with r= {} and A= {}'.format(xs,ys,seedling[2],seedling[3]), message_type='success')
     move_absolute(weeder,(120,0,200),100)
     move_absolute(weeder,(120,0,0),100)
     move_absolute(weeder,(0,0,0),100)
