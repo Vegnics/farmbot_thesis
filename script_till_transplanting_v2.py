@@ -351,6 +351,7 @@ cv2.imwrite(image_filename, img_segmented)
 
 device.log(message='Seedling detection OK', message_type='success')
 
+"""
 if len(seedlings)>0:
     move_absolute(weeder,(0,0,0),100)
     move_absolute(weeder,(100,0,0),100)
@@ -372,4 +373,4 @@ if len(seedlings)>0:
     
 move_absolute((0,0,0),(0,0,0),100)
 device.log(message='Process finished OK', message_type='success')   
-
+"""
