@@ -360,7 +360,7 @@ if len(seedlings)>0:
     for seedling in seedlings:
         xs,ys=seedling[0]
         aux=np.abs(xs-matrix[:,:,0])+np.abs(ys-matrix[:,:,1])
-    #    (min,_,minloc,_)=cv2.minMaxLoc(aux,None)
+        (min,_,minloc,_)=cv2.minMaxLoc(aux,None)
     #    xmat=minloc[0]-1
     #    ymat=minloc[1]-1
     #    x,y=matrix[ymat,xmat]
