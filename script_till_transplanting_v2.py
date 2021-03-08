@@ -401,6 +401,7 @@ if len(seedlings)>0:
         device.wait(2000)
         move_absolute((x,y,-215),(0,0,0),100)
         device.wait(500)
+        next_ys = next_ys + 5 # CHANGE THE NEXT_YS VALUE
         move_absolute((next_xs,next_ys,-160),(0,0,0),100)
         move_absolute((next_xs,next_ys,-278),(0,0,0),100)
         device.write_pin(gripper_pin,gripper_up,0)
