@@ -248,6 +248,7 @@ device.log(message='descriptors shape= {}'.format(descriptors.shape), message_ty
 #device.move_absolute(capture_pos, speed=100, offset=device.assemble_coordinate(0,0,0))
 move_absolute((500,400,0),(0,0,0),100)
 
+start_totalproc = time()
 #OBTAINING THE IMAGE
 img=usb_camera_photo()
 #img = cv2.imread(dir_path+'/'+'image_orig3.jpeg',1)
@@ -300,7 +301,7 @@ stop = time()
 device.log(message='contour_extraction_time= {}'.format(stop-start), message_type='success')
 
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
-cv2.imwrite(image_filename, img_segmented)  
+cv2.imwrite(image_filename, img_segmented)
 
 #####move_absolute(weeder,(0,0,15),100)
 #move_absolute(weeder,(0,0,0),100)
@@ -368,9 +369,14 @@ for cnt in contours:
 
 image_filename = directory + '{timestamp}.jpg'.format(timestamp=int(time()))
 cv2.imwrite(image_filename, img_segmented)
+stop_totalproc = time()
+totalproc_time = stop_totalproc - start_totalproc
+
+transplanting_times=[]
 
 device.log(message='Seedling detection OK', message_type='success')
 
+start_totaltransp = time()
 
 if len(seedlings)>0:
     move_absolute(weeder,(0,0,0),100)
@@ -379,6 +385,7 @@ if len(seedlings)>0:
     move_absolute(weeder,(100,0,260),100)
     device.write_pin(gripper_pin,gripper_up,0)
     for seedling in seedlings:
+        start_transp=time()
         next_xs,next_ys = get_hole_coords(matrix2,seedling_class_a_num)
         seedling_class_a_num += 1
         device.log(message='seedling= {}'.format(seedling), message_type='success')
@@ -415,11 +422,26 @@ if len(seedlings)>0:
         device.write_pin(gripper_pin,gripper_up,0)
         device.wait(600)
         move_absolute((next_xs,next_ys,-205),(0,0,0),100)
+        stop_transp=time()
+        transplanting_times.append(stop_transp-start_transp)
         device.log(message='Seedling found at = {},{} with r= {} and A= {}'.format(xs,ys,seedling[2],seedling[3]), message_type='success')
     move_absolute(weeder,(120,0,200),100)
     move_absolute(weeder,(120,0,0),100)
     move_absolute(weeder,(0,0,0),100)
     move_absolute(weeder,(0,0,200),100)
-    
+
+
+stop_totaltransp = time()
+totaltransp_time = stop_totaltransp - start_totaltransp
+
 move_absolute((0,0,0),(0,0,0),100)
-device.log(message='Process finished OK', message_type='success')   
+device.log(message='Process finished OK', message_type='success')
+transptime_min = np.min(transplanting_times)
+transptime_max = np.max(transplanting_times)
+transptime_mean = np.mean(transplanting_times)
+
+device.log(message='Transplanting time per seedling: min ={}; max ={}; mean ={}'.format(transptime_min,transptime_max,transptime_mean), message_type='success')
+device.log(message='Total transplanting time: {}'.format(totaltransp_time), message_type='success')
+device.log(message='Processing time: {}'.format(totalproc_time), message_type='success')
+
+
