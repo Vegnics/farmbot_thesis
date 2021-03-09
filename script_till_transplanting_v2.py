@@ -344,6 +344,7 @@ for cnt in contours:
                 device.log(message='Matched = {}'.format(D), message_type='success')
                 cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
                 seedlings.append([P[0],P[1],r,moments['m00']])
+                
                 #aux=np.abs(P[0]-matrix[:,:,0])+np.abs(P[1]-matrix[:,:,1])
                 #(min,_,minloc,_)=cv2.minMaxLoc(aux,None)
                 #xmat=minloc[0]-1
@@ -376,7 +377,6 @@ if len(seedlings)>0:
     for seedling in seedlings:
         next_xs,next_ys = get_hole_coords(matrix2,seedling_class_a_num)
         seedling_class_a_num += 1
-      
         device.log(message='seedling= {}'.format(seedling), message_type='success')
         xs=seedling[0]
         ys=seedling[1]
