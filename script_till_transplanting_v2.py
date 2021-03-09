@@ -343,7 +343,7 @@ for cnt in contours:
                 #cx = int(moments['m10'] / moments['m00'])
                 #cy = int(moments['m01'] / moments['m00'])
                 (_cx,_cy),r  = cv2.minEnclosingCircle(cnt)
-                P = pixel2coord([cy,cx],[500.0,400.0,0.0],485.0 ,intrinsics,rmatrix,tvec)#Change Z
+                P = pixel2coord([cy,cx],[500.0,400.0,0.0],465.0 ,intrinsics,rmatrix,tvec)#Change Z
                 device.log(message='Matched = {}'.format(D), message_type='success')
                 cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
                 seedlings.append([P[0],P[1],r,moments['m00']])
@@ -377,6 +377,7 @@ if len(seedlings)>0:
     move_absolute(weeder,(100,0,0),100)
     move_absolute(weeder,(100,0,100),100)
     move_absolute(weeder,(100,0,260),100)
+    device.write_pin(gripper_pin,gripper_up,0)
     for seedling in seedlings:
         next_xs,next_ys = get_hole_coords(matrix2,seedling_class_a_num)
         seedling_class_a_num += 1
