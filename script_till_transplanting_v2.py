@@ -339,7 +339,7 @@ for cnt in contours:
             stop = time()
             times.append(stop-start)
             #device.log(message='compare = {}'.format(D), message_type='success')
-            if D < 0.8:
+            if D < 1:
                 #moments = cv2.moments(cnt)
                 #cx = int(moments['m10'] / moments['m00'])
                 #cy = int(moments['m01'] / moments['m00'])
@@ -347,8 +347,13 @@ for cnt in contours:
                 P = pixel2coord([cy,cx],[500.0,400.0,0.0],465.0 ,intrinsics,rmatrix,tvec)#Change Z
                 device.log(message='Matched = {}'.format(D), message_type='success')
                 cv2.drawContours(img_segmented,cnt,-1,[0,0,255],3)
-                seedlings.append([P[0],P[1],r,moments['m00']])
-                
+                A = moments['m00']
+                if (r>=65 and r<85 and A>=3500 and A<6000):
+                    seedlings.append([P[0],P[1],r,A,"a"])
+                elif (r>=55 and r<65 and A>=2900 and A<3500):
+                    seedlings.append([P[0],P[1],r,A,"b"])
+                elif (r<55 and A<3500):
+                    seedlings.append([P[0],P[1],r,A,"c"])
                 #aux=np.abs(P[0]-matrix[:,:,0])+np.abs(P[1]-matrix[:,:,1])
                 #(min,_,minloc,_)=cv2.minMaxLoc(aux,None)
                 #xmat=minloc[0]-1
@@ -386,8 +391,16 @@ if len(seedlings)>0:
     device.write_pin(gripper_pin,gripper_up,0)
     for seedling in seedlings:
         start_transp=time()
-        next_xs,next_ys = get_hole_coords(matrix2,seedling_class_a_num)
-        seedling_class_a_num += 1
+        if (seedling[4]=="a"):
+            next_xs,next_ys = get_hole_coords(matrix2,seedling_class_a_num)
+            seedling_class_a_num += 1
+        elif (seedling[4]=="b"):
+            next_xs,next_ys = get_hole_coords(matrix3,seedling_class_b_num)
+            seedling_class_b_num += 1
+        elif (seedling[4]=="c"):
+            next_xs,next_ys = get_hole_coords(matrix4,seedling_class_c_num)
+            seedling_class_c_num += 1
+            
         device.log(message='seedling= {}'.format(seedling), message_type='success')
         xs=seedling[0]
         ys=seedling[1]
