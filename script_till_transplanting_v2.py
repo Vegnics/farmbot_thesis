@@ -246,7 +246,8 @@ device.log(message='descriptors shape= {}'.format(descriptors.shape), message_ty
 #MOVEMENTS
 #capture_pos = device.assemble_coordinate(500,400,0)
 #device.move_absolute(capture_pos, speed=100, offset=device.assemble_coordinate(0,0,0))
-move_absolute((500,400,0),(0,0,0),100)
+
+#move_absolute((500,400,0),(0,0,0),100)
 
 start_totalproc = time()
 #OBTAINING THE IMAGE
