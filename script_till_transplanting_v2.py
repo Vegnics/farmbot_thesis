@@ -255,6 +255,7 @@ img=usb_camera_photo()
 #img = cv2.imread(dir_path+'/'+'image_orig3_mod.jpeg',1)
 
 
+"""
 #PREPROCESSING
 start = time()
 #I_filtered = homomorph_filter_N3(img,butt_kernel)
@@ -456,5 +457,5 @@ transptime_mean = np.mean(transplanting_times)
 device.log(message='Transplanting time per seedling: min ={}; max ={}; mean ={}'.format(transptime_min,transptime_max,transptime_mean), message_type='success')
 device.log(message='Total transplanting time: {}'.format(totaltransp_time), message_type='success')
 device.log(message='Processing time: {}'.format(totalproc_time), message_type='success')
-
+"""
 
